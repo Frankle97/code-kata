@@ -1,2 +1,2 @@
-# Code Kata
-[Code Kata](http://codekata.com/), 꾸준한 연습으로 통해 발전하기
+# 🔪 Code Kata
+[Code Kata](http://codekata.com/), 꾸준한 Practice, practice를 통해 나를 발전시키기
