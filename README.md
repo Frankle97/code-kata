@@ -1,2 +1,2 @@
 # Code Kata
-[Code Kata](http://codekata.com/), 오늘보다 나은 내일의 나를 만들기 위한 꾸준한 연습
+[Code Kata](http://codekata.com/), 꾸준한 연습으로 통해 발전하기
