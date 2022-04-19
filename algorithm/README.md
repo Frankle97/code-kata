@@ -1,5 +1,5 @@
 # Algorithm
-
+2022.04.19 start
 ## Priority
 1. 그리디
 2. 탐색
@@ -11,3 +11,7 @@
 - programmers
 - leetcode
 - hackerrank
+
+## History
+2022.04.19: B3
+2022.06.01: ?
