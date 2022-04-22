@@ -49,7 +49,7 @@ public class String_04 {
                 chars[lt] = chars[rt]; // 문자 배열의 마지막 요소를 첫번째 공간에 대입한다.
                 chars[rt] = tmp; // 문자 배열의 첫번째 요소를 마지막 공간에 대입한다.
                 lt++;   // first index +1
-                rt--;   // last index +1
+                rt--;   // last index +
             }
             sb.append(String.valueOf(chars)).append("\n");
         }
