@@ -42,14 +42,14 @@ public class String_04 {
         StringBuilder sb = new StringBuilder();
         for (String s : arr) {
             char[] chars = s.toCharArray();
-            int lt = 0;
-            int rt = s.length() - 1;
+            int lt = 0; // 문자의 first index
+            int rt = s.length() - 1;    //문자의 last index
             while (lt < rt) {
-                char tmp = chars[lt];
-                chars[lt] = chars[rt];
-                chars[rt] = tmp;
-                lt++;
-                rt--;
+                char tmp = chars[lt];   // 마지막 요소를 임시 char에 넣는다.
+                chars[lt] = chars[rt]; // 문자 배열의 마지막 요소를 첫번째 공간에 대입한다.
+                chars[rt] = tmp; // 문자 배열의 첫번째 요소를 마지막 공간에 대입한다.
+                lt++;   // first index +1
+                rt--;   // last index +1
             }
             sb.append(String.valueOf(chars)).append("\n");
         }
