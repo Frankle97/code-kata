@@ -7,32 +7,32 @@ public class String_10 {
         Scanner sc = new Scanner(System.in);
         String next = sc.nextLine();
         String[] split = next.split(" ");
-        System.out.println(solution1(split[0], split[1]));
+        System.out.println(solution1(split[0], split[1].charAt(0)));
     }
 
-    private static String solution1(String line, String e) {
+    private static String solution1(String s, char c) {
         StringBuilder sb = new StringBuilder();
-        char point = e.charAt(0);
-        char[] charArray = line.toCharArray();
-        int[] intArray = new int[line.length()];
-        int tmp = 0;
-        for (int i = 0; i < charArray.length; i++) {
-            int count = 0;
-            for (int j = tmp; j < charArray.length; j++) {
-                char c = charArray[j];
-                if (point == c) {
-                    tmp = j;
-                    if (count == 0) {
-                        tmp++;
-                    }
-                    intArray[i] = count;
-                    break;
-                } else {
-                    count++;
-                }
+        int[] answer = new int[s.length()];
+        int p = 1000;
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == c) {
+                p = 0;
+            } else {
+                p++;
+            }
+            answer[i] = p;
+        }
+        p = 1000;
+        for (int i = s.length() - 1; i >= 0; i--) {
+            if (s.charAt(i) == c) {
+                p = 0;
+            } else {
+                p++;
+                answer[i] = Math.min(answer[i], p);
             }
         }
-        for (int j : intArray) {
+
+        for (int j : answer) {
             sb.append(j).append(" ");
         }
 
