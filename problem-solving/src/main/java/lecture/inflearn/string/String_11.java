@@ -10,6 +10,7 @@ public class String_11 {
     }
 
     private static String solution1(String next) {
+        next += " ";
         StringBuilder sb = new StringBuilder();
         int count = 1;
         for (int i = 0; i < next.length(); i++) {
