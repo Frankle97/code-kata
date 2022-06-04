@@ -12,7 +12,7 @@ public class Array_09 {
                 arr[i][j] = sc.nextInt();
             }
         }
-        System.out.println(solution1(n, arr));
+        System.out.println(solution(n, arr));
     }
 
     private static int solution(int n, int[][] arr) {
