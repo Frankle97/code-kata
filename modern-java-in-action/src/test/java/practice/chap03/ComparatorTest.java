@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import practice.apple.Apple;
 import practice.apple.Apples;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,6 +19,12 @@ public class ComparatorTest {
             .sorted(Comparator.comparingInt(Apple::weight))
             .map(Apple::color)
             .collect(Collectors.toList());
-        System.out.println("collect = " + collect);
+
+        List<Integer> list = new ArrayList<>();
+        list.add(1);
+        list.add(3);
+        list.add(6);
+        Integer reduce = list.stream().reduce(1, Integer::sum);
+        System.out.println("reduce = " + reduce);
     }
 }
