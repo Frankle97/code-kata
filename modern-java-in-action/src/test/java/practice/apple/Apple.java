@@ -1,4 +1,4 @@
-package practice.chap02;
+package practice.apple;
 
 public class Apple {
     private final int weight;
@@ -16,4 +16,5 @@ public class Apple {
     public String color() {
         return this.color;
     }
+
 }
