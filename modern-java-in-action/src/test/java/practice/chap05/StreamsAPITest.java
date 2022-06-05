@@ -12,7 +12,6 @@ import static java.util.Comparator.comparing;
 import static java.util.Comparator.comparingInt;
 
 /**
- * TODO
  * 1. 2011년에 일어난 모든 트랜잭션을 찾아 오름차순으로 정리하시오.
  * 2. 거래자가 근무하는 모든 도시를 중복없이 나열하시오.
  * 3. 케임브리지에서 근무하는 모든 거래자를 찾아서 이름순으로 정렬하시오.
