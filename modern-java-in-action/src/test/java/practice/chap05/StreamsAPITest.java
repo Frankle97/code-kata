@@ -5,11 +5,12 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static java.util.Comparator.comparing;
 import static java.util.Comparator.comparingInt;
+import static java.util.stream.Collectors.*;
 
 /**
  * 1. 2011년에 일어난 모든 트랜잭션을 찾아 오름차순으로 정리하시오.
@@ -47,7 +48,7 @@ public class StreamsAPITest {
         List<Transaction> collect = transactions.stream()
             .filter(v -> v.getYear() == 2011)
             .sorted(comparingInt(Transaction::getValue))
-            .collect(Collectors.toList());
+            .collect(toList());
         print(collect);
     }
 
@@ -56,7 +57,7 @@ public class StreamsAPITest {
         List<String> collect = transactions.stream()
             .map(v -> v.getTrader().getCity())
             .distinct()
-            .collect(Collectors.toList());
+            .collect(toList());
         print(collect);
     }
 
@@ -64,7 +65,7 @@ public class StreamsAPITest {
     void case3() {
         List<Transaction> collect = transactions.stream()
             .filter(v -> v.getTrader().getCity().equals("Cambridge"))
-            .collect(Collectors.toList());
+            .collect(toList());
         print(collect);
     }
 
@@ -72,7 +73,7 @@ public class StreamsAPITest {
     void case4() {
         List<Transaction> collect = transactions.stream()
             .sorted(comparing(v -> v.getTrader().getName()))
-            .collect(Collectors.toList());
+            .collect(toList());
         print(collect);
     }
 
@@ -88,7 +89,7 @@ public class StreamsAPITest {
         List<Integer> cambridge = transactions.stream()
             .filter(v -> v.getTrader().getCity().equals("Cambridge"))
             .map(Transaction::getValue)
-            .collect(Collectors.toList());
+            .collect(toList());
         print(cambridge);
     }
 
@@ -106,6 +107,61 @@ public class StreamsAPITest {
             .map(Transaction::getValue)
             .reduce((t1, t2) -> t1 < t2 ? t1 : t2);
         System.out.println("reduce = " + reduce.get());
+    }
+
+    @Test
+    void getMaxMinValue() {
+        long max = transactions.stream()
+            .mapToLong(Transaction::getValue)
+            .max()
+            .orElse(0);
+
+        int min = transactions.stream()
+            .mapToInt(Transaction::getValue)
+            .min()
+            .orElse(0);
+
+        System.out.println("max = " + max + ", min = " + min);
+    }
+
+    @Test
+    void joiningString() {
+        String collect = transactions.stream()
+            .map(v -> v.getTrader().getName())
+            .collect(joining(", "));
+        System.out.println("collect = " + collect);
+    }
+
+    @Test
+    void groupingByName() {
+        Map<Integer, List<Transaction>> collect = transactions.stream()
+            .collect(groupingBy(Transaction::getYear));
+        System.out.println("collect = " + collect);
+
+        Map<Integer, List<String>> listMap = transactions.stream()
+            .collect(groupingBy(Transaction::getYear,
+                mapping(v -> v.getTrader().getName(), toList())));
+        System.out.println("listMap = " + listMap);
+
+        Map<Integer, Transaction> collect1 = transactions.stream()
+            .collect(groupingBy(Transaction::getYear,
+                collectingAndThen(minBy(comparingInt(Transaction::getValue)), Optional::get)));
+        System.out.println("collect1 = " + collect1);
+
+
+    }
+
+    @Test
+    void groupingByValueLevel() {
+        Map<String, List<Transaction>> collect = transactions.stream()
+            .collect(groupingBy(
+                v -> {
+                    if (v.getValue() <= 500) return "low";
+                    else if (v.getValue() >= 500) return "high";
+                    else return "unknown";
+                }));
+
+        System.out.println("collect = " + collect);
     }
 
 
