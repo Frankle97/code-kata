@@ -11,7 +11,6 @@ public class BankStatementAnalyzer {
     private static final String RESOURCES = "real-world-software-development/src/main/resources/";
 
     public void analyze(final String fileName, final BankStatementParser bankStatementParser) throws IOException {
-
         final Path path = Paths.get(RESOURCES + fileName);
         final List<String> lines = Files.readAllLines(path);
 
@@ -33,5 +32,9 @@ public class BankStatementAnalyzer {
                 + bankStatementProcessor.calculateTotalInMonth(Month.FEBRUARY));
         System.out.println("The total salary received is "
                 + bankStatementProcessor.calculateTotalForCategory("Salary"));
+        System.out.println("The total for greater than amount is "
+            + bankStatementProcessor.findTransactionGreaterThenEqual(1000));
+        System.out.println("The total for in month is "
+            + bankStatementProcessor.calculateTotalInMonth(Month.JANUARY));
     }
 }
