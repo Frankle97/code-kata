@@ -1,2 +1,1 @@
-# 🔪 Code Kata
-[Code Kata](http://codekata.com/), Steady Practice and practice
+코딩 낙서장
