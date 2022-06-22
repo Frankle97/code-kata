@@ -3,7 +3,7 @@ package chapter_01.duck;
 import chapter_01.duck.fly.FlyBehavior;
 import chapter_01.duck.quack.QuackBehavior;
 
-public abstract class Duck {
+public class Duck {
     private final FlyBehavior flyBehavior;
     private final QuackBehavior quackBehavior;
 

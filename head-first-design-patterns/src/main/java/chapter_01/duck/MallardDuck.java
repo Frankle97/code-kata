@@ -1,16 +1,18 @@
 package chapter_01.duck;
 
-import chapter_01.duck.fly.FlyBehavior;
-import chapter_01.duck.quack.QuackBehavior;
+public class MallardDuck {
 
-public class MallardDuck extends Duck {
+    private final Duck duck;
 
-    public MallardDuck(FlyBehavior flyBehavior, QuackBehavior quackBehavior) {
-        super(flyBehavior, quackBehavior);
+    public MallardDuck(Duck duck) {
+        this.duck = duck;
     }
 
-    @Override
-    protected void performFly() {
-        super.performFly();
+    public void performFly() {
+        duck.performFly();
+    }
+
+    public void performQuack() {
+        duck.performQuack();
     }
 }
