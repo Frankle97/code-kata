@@ -1,6 +1,7 @@
 package springbook;
 
 import java.sql.SQLException;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import springbook.user.dao.DConnectionMaker;
 import springbook.user.dao.DaoFactory;
 import springbook.user.dao.UserDao;
@@ -9,7 +10,9 @@ import springbook.user.domain.User;
 public class UserDaoTest {
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
-        UserDao userDao = new DaoFactory().userDao();
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
+            DaoFactory.class);
+        UserDao userDao = context.getBean("userDao", UserDao.class);
         User user = new User();
         user.setId("frankle");
         user.setName("정재엽");
