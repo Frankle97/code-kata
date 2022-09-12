@@ -13,18 +13,24 @@ public class UserDaoTest {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
             DaoFactory.class);
         UserDao userDao = context.getBean("userDao", UserDao.class);
-        User user = new User();
-        user.setId("frankle");
-        user.setName("정재엽");
-        user.setPassword("1234");
+        User user1 = new User();
+        user1.setId("frankle");
+        user1.setName("정재엽");
+        user1.setPassword("1234");
 
-        userDao.add(user);
+        userDao.add(user1);
 
-        System.out.println("등록 성공, user.getId() = " + user.getId());
+        System.out.println("등록 성공, user1.getId() = " + user1.getId());
 
-        User user1 = userDao.get(user.getId());
-        System.out.println("user1 Name = " + user1.getName());
-        System.out.println("user1 Pass = " + user1.getPassword());
+        User user2 = userDao.get(user1.getId());
+
+        if (!user1.getName().equals(user2.getName())) {
+            System.out.println("테스트 실패 (name)");
+        } else if (!user1.getPassword().equals(user2.getPassword())) {
+            System.out.println("테스트 실패 (password)");
+        } else {
+            System.out.println("테스트 성공");
+        }
     }
 
 }
