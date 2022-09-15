@@ -4,6 +4,7 @@ package user.dao;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.sql.SQLException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -12,16 +13,23 @@ import springbook.user.domain.User;
 
 public class UserDaoTest {
 
-    @Test
-    public void addAndGet() throws SQLException {
+    private UserDao dao;
+    private User user1;
+    private User user2;
+    private User user3;
+
+    @BeforeEach
+    void setUp() {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
             "applicationContext-test.xml");
+        this.dao = context.getBean("userDao", UserDao.class);
+        this.user1 = new User("user1", "에이", "spring1");
+        this.user2 = new User("user2", "비", "spring2");
+        this.user3 = new User("user3", "쒸익", "spring3");
+    }
 
-        UserDao dao = context.getBean("userDao", UserDao.class);
-
-        User user1 = new User("jyeob", "woduq", "1234");
-        User user2 = new User("suyeon", "tndus", "12345");
-
+    @Test
+    public void addAndGet() throws SQLException {
         dao.deleteAll();
         assertEquals(dao.getCount(), 0);
 
@@ -40,36 +48,24 @@ public class UserDaoTest {
 
     @Test
     public void count() throws SQLException {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
-            "applicationContext-test.xml");
+        dao.deleteAll();
+        assertEquals(dao.getCount(), 0);
 
-        UserDao userDao = context.getBean("userDao", UserDao.class);
-        User user1 = new User("user1", "에이", "spring1");
-        User user2 = new User("user2", "비", "spring2");
-        User user3 = new User("user3", "쒸익", "spring3");
+        dao.add(user1);
+        assertEquals(dao.getCount(), 1);
 
-        userDao.deleteAll();
-        assertEquals(userDao.getCount(), 0);
+        dao.add(user2);
+        assertEquals(dao.getCount(), 2);
 
-        userDao.add(user1);
-        assertEquals(userDao.getCount(), 1);
-
-        userDao.add(user2);
-        assertEquals(userDao.getCount(), 2);
-
-        userDao.add(user3);
-        assertEquals(userDao.getCount(), 3);
+        dao.add(user3);
+        assertEquals(dao.getCount(), 3);
     }
 
     @Test
     public void getUserFailure() throws SQLException {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
-            "applicationContext-test.xml");
+        dao.deleteAll();
+        assertEquals(dao.getCount(), 0);
 
-        UserDao userDao = context.getBean("userDao", UserDao.class);
-        userDao.deleteAll();
-        assertEquals(userDao.getCount(), 0);
-
-        assertThrows(SQLException.class, () -> userDao.get("unknown_id"));
+        assertThrows(SQLException.class, () -> dao.get("unknown_id"));
     }
 }
