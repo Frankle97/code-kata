@@ -6,8 +6,8 @@ public class Array_01 {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         int n = Integer.parseInt(sc.nextLine());
-        String[] s = sc.nextLine().split(" ");
         int[] intArray = new int[n];
+        String[] s = sc.nextLine().split(" ");
         for (int i = 0; i < n; i++) {
             intArray[i] = Integer.parseInt(s[i]);
         }
