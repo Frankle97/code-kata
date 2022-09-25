@@ -4,10 +4,13 @@ package user.dao;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.sql.SQLException;
+import java.util.List;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.util.Assert;
 import springbook.user.dao.UserDao;
 import springbook.user.domain.User;
 
@@ -66,6 +69,7 @@ public class UserDaoTest {
         dao.deleteAll();
         assertEquals(dao.getCount(), 0);
 
-        assertThrows(SQLException.class, () -> dao.get("unknown_id"));
+        assertThrows(EmptyResultDataAccessException.class, () -> dao.get("unknown_id"));
     }
+
 }
