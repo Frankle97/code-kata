@@ -19,6 +19,7 @@ dependencies {
     implementation("org.springframework:spring-jdbc:5.3.22")
     testImplementation('org.junit.jupiter:junit-jupiter:5.5.0')
     testImplementation ('org.springframework:spring-test:5.0.2.RELEASE')
+    testImplementation 'junit:junit:4.13.1'
     annotationProcessor("org.projectlombok:lombok:1.18.24")
 }
 

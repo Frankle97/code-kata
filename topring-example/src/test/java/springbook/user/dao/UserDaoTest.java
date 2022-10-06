@@ -1,13 +1,13 @@
-package user.dao;
+package springbook.user.dao;
 
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.dao.EmptyResultDataAccessException;
-import springbook.user.dao.UserDao;
-import springbook.user.dao.UserDaoJdbc;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import springbook.user.domain.Level;
 import springbook.user.domain.User;
 
@@ -16,6 +16,8 @@ import java.sql.SQLException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration("classpath:applicationContext.xml")
 public class UserDaoTest {
 
     @Autowired
@@ -26,9 +28,6 @@ public class UserDaoTest {
 
     @BeforeEach
     void setUp() {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
-            "applicationContext-test.xml");
-        this.dao = context.getBean("userDao", UserDaoJdbc.class);
         this.user1 = new User("user1", "에이", "spring1", Level.BASIC, 1, 0);
         this.user2 = new User("user2", "비", "spring2", Level.SILVER, 55, 10);
         this.user3 = new User("user3", "쒸익", "spring3", Level.GOLD, 100, 40);
@@ -55,6 +54,7 @@ public class UserDaoTest {
         dao.deleteAll();
 
         dao.add(user1);
+        dao.add(user2);
 
         user1.setName("정재엽");
         user1.setPassword("1234");
@@ -65,6 +65,8 @@ public class UserDaoTest {
 
         User user1update = dao.get(user1.getId());
         checkSameUser(user1, user1update);
+        User user2update = dao.get(user2.getId());
+        checkSameUser(user2, user2update);
     }
 
     @Test
