@@ -1,11 +1,9 @@
 package springbook.user.domain;
 
-import org.springframework.validation.beanvalidation.SpringValidatorAdapter;
-
 public enum Level {
     BASIC(1),
-    SILVER(1),
-    GOLD(1);
+    SILVER(2),
+    GOLD(3);
 
     int value;
 
