@@ -10,6 +10,13 @@ import static springbook.user.service.UserService.MIN_RECOMMEND_FOR_GOLD;
 public class BigSmilePolicy implements UserLevelUpgradePolicy {
     UserDao userDao;
 
+    public BigSmilePolicy() {
+    }
+
+    public BigSmilePolicy(UserDao userDao) {
+        this.userDao = userDao;
+    }
+
     public void setUserDao(UserDao userDao) {
         this.userDao = userDao;
     }
