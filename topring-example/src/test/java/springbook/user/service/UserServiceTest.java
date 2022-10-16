@@ -23,14 +23,16 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
-import static springbook.user.service.UserService.MIN_LOGCOUNT_FOR_SILVER;
-import static springbook.user.service.UserService.MIN_RECCOMEND_FOR_GOLD;
+import static springbook.user.service.UserServiceImpl.MIN_LOGCOUNT_FOR_SILVER;
+import static springbook.user.service.UserServiceImpl.MIN_RECCOMEND_FOR_GOLD;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration("classpath:applicationContext.xml")
 public class UserServiceTest {
     @Autowired
     UserService userService;
+    @Autowired
+    UserServiceImpl userServiceImpl;
     @Autowired
     UserDao userDao;
     @Autowired
@@ -45,23 +47,24 @@ public class UserServiceTest {
     @BeforeEach
     void setUp() {
         this.users = Arrays.asList(
-                new User("frankle", "정재엽", "p1", "pairpapa@gmail.com", Level.BASIC, MIN_LOGCOUNT_FOR_SILVER-1, 0),
+                new User("frankle", "정재엽", "p1", "pairpapa@gmail.com", Level.BASIC, MIN_LOGCOUNT_FOR_SILVER - 1, 0),
                 new User("jamie", "제이미", "p2", "pairpapa@gmail.com", Level.BASIC, MIN_LOGCOUNT_FOR_SILVER, 0),
-                new User("olive", "올리브", "p3", "pairpapa@gmail.com", Level.SILVER, 60, MIN_RECCOMEND_FOR_GOLD-1),
+                new User("olive", "올리브", "p3", "pairpapa@gmail.com", Level.SILVER, 60, MIN_RECCOMEND_FOR_GOLD - 1),
                 new User("pizza", "오브리", "p4", "pairpapa@gmail.com", Level.SILVER, 60, MIN_RECCOMEND_FOR_GOLD),
                 new User("mason", "박줌미", "p5", "pairpapa@gmail.com", Level.GOLD, 100, Integer.MAX_VALUE)
         );
     }
 
-    @Test @DirtiesContext
+    @Test
+    @DirtiesContext
     public void upgradeLevels() throws SQLException {
         userDao.deleteAll();
-        for(User user : users) userDao.add(user);
+        for (User user : users) userDao.add(user);
 
         MockMailSender mockMailSender = new MockMailSender();
-        userService.setMailSender(mockMailSender);
+        userServiceImpl.setMailSender(mockMailSender);
 
-        userService.upgradeLevels();
+        userServiceImpl.upgradeLevels();
 
         checkLevelUpgraded(users.get(0), false);
         checkLevelUpgraded(users.get(1), true);
@@ -76,7 +79,7 @@ public class UserServiceTest {
     }
 
     static class MockMailSender implements MailSender {
-        private List<String> requests = new ArrayList<String>();
+        private final List<String> requests = new ArrayList<String>();
 
         public List<String> getRequests() {
             return requests;
@@ -120,18 +123,21 @@ public class UserServiceTest {
 
     @Test
     void upgradeAllOrNothing() {
-        UserService testUserService = new TestUserService(users.get(3).getId());
+        TestUserService testUserService = new TestUserService(users.get(3).getId());
         testUserService.setUserDao(userDao);
-        testUserService.setTransactionManager(this.transactionManager);
         testUserService.setMailSender(this.mailSender);
-        userDao.deleteAll();
 
+        UserServiceTx userServiceTx = new UserServiceTx();
+        userServiceTx.setTransactionManager(transactionManager);
+        userServiceTx.setUserService(testUserService);
+
+        userDao.deleteAll();
         for (User user : users) {
             userDao.add(user);
         }
 
         try {
-            testUserService.upgradeLevels();
+            userServiceTx.upgradeLevels();
             fail("TestUserServiceException Excepted");
         } catch (TestUserServiceException e) {
 
@@ -140,7 +146,7 @@ public class UserServiceTest {
         checkLevelUpgraded(users.get(1), false);
     }
 
-    static class TestUserService extends UserService {
+    static class TestUserService extends UserServiceImpl {
         private String id;
 
         public TestUserService(String id) {
