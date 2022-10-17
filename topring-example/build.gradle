@@ -21,6 +21,7 @@ dependencies {
     implementation("javax.mail:mail:1.4.7")
     implementation("javax.activation:activation:1.1.1")
 
+    testImplementation 'org.mockito:mockito-core:2.1.0'
     testImplementation('org.junit.jupiter:junit-jupiter:5.5.0')
     testImplementation ('org.springframework:spring-test:5.0.2.RELEASE')
     testImplementation 'junit:junit:4.13.1'
