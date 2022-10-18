@@ -1,5 +1,6 @@
 package springbook.user.service;
 
+import learningtest.jdk.proxy.TransactionHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,6 +18,7 @@ import springbook.user.domain.Level;
 import springbook.user.domain.User;
 
 import javax.sql.DataSource;
+import java.lang.reflect.Proxy;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -162,9 +164,16 @@ public class UserServiceTest {
         testUserService.setUserDao(userDao);
         testUserService.setMailSender(this.mailSender);
 
-        UserServiceTx userServiceTx = new UserServiceTx();
-        userServiceTx.setTransactionManager(transactionManager);
-        userServiceTx.setUserService(testUserService);
+//        UserServiceTx userServiceTx = new UserServiceTx();
+//        userServiceTx.setTransactionManager(transactionManager);
+//        userServiceTx.setUserService(testUserService);
+
+        TransactionHandler txHandler = new TransactionHandler();
+        txHandler.setTarget(testUserService);
+        txHandler.setTransactionManager(transactionManager);
+        txHandler.setPattern("upgradeLevels");
+        UserService txUserService = (UserService) Proxy.newProxyInstance(
+                getClass().getClassLoader(), new Class[]{UserService.class}, txHandler);
 
         userDao.deleteAll();
         for (User user : users) {
@@ -172,7 +181,7 @@ public class UserServiceTest {
         }
 
         try {
-            userServiceTx.upgradeLevels();
+            txUserService.upgradeLevels();
             fail("TestUserServiceException Excepted");
         } catch (TestUserServiceException e) {
 
