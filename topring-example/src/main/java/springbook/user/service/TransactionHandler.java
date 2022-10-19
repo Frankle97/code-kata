@@ -1,4 +1,4 @@
-package learningtest.jdk.proxy;
+package springbook.user.service;
 
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;

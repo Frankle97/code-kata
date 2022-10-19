@@ -66,5 +66,4 @@ public class UserServiceImpl implements UserService {
         if (user.getLevel() == null) user.setLevel(Level.BASIC);
         userDao.add(user);
     }
-
 }
