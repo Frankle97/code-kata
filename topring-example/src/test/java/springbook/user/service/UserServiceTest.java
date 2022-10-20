@@ -157,9 +157,8 @@ public class UserServiceTest {
 
         try {
             this.testUserService.upgradeLevels();
-            fail("TestUserServiceException Excepted"); // 성공하면 안돼
+            fail("TestUserServiceException Excepted"); // 성공하면 안
         } catch (TestUserServiceException e) {
-
         }
 
         checkLevelUpgraded(users.get(1), false);
