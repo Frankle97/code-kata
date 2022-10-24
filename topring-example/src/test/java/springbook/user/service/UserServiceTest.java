@@ -11,8 +11,11 @@ import org.springframework.mail.MailException;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.Transactional;
 import springbook.user.dao.UserDao;
 import springbook.user.domain.Level;
 import springbook.user.domain.User;
@@ -37,6 +40,8 @@ public class UserServiceTest {
     UserService testUserService;
     @Autowired
     UserDao userDao;
+    @Autowired
+    PlatformTransactionManager transactionManager;
 
     List<User> users;
 
@@ -237,4 +242,12 @@ public class UserServiceTest {
         }
     }
 
+    @Test
+    @Transactional
+    @Rollback(value = false)
+    void transactionSync() {
+        userService.deleteAll();
+        userService.add(users.get(0));
+        userService.add(users.get(1));
+    }
 }
