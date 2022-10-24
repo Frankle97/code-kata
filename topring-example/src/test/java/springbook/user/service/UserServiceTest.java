@@ -1,10 +1,12 @@
 package springbook.user.service;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.TransientDataAccessResourceException;
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
@@ -164,7 +166,12 @@ public class UserServiceTest {
         checkLevelUpgraded(users.get(1), false);
     }
 
-    static class TestUserServiceImpl extends UserServiceImpl {
+    @Test
+    void readOnlyTransactionAttribute() {
+        Assertions.assertThrows(TransientDataAccessResourceException.class, () -> testUserService.getAll());
+    }
+
+    static class TestUserService extends UserServiceImpl {
         private String id = "jamie";
 
         @Override
@@ -173,6 +180,14 @@ public class UserServiceTest {
                 throw new TestUserServiceException();
             }
             super.upgradeLevel(user);
+        }
+
+        @Override
+        public List<User> getAll() {
+            for (User user : super.getAll()) {
+                super.update(user);
+            }
+            return null;
         }
     }
 
