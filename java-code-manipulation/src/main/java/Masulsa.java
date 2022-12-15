@@ -7,6 +7,7 @@ public class Masulsa {
 //        } catch (IOException e) {
 //            throw new RuntimeException(e);
 //        }
+        // aaa
 
         System.out.println(new Moja().pullOut());
     }
