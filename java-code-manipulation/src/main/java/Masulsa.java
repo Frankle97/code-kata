@@ -16,5 +16,6 @@ public class Masulsa {
         }
 
         System.out.println(new Moja().pullOut());
+        // aaaa
     }
 }
