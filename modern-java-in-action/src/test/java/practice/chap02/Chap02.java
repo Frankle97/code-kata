@@ -35,16 +35,16 @@ public class Chap02 {
         List<Apple> apples = new ArrayList<>();
         apples.add(new Apple(GREEN));
         apples.add(new Apple(RED));
-        List<Apple> result = filterGreenApples(apples);
+        List<Apple> result = filterApplesByColor(apples, RED);
         for (Apple apple : result) {
             System.out.println("apple = " + apple);
         }
     }
 
-    private static List<Apple> filterGreenApples(List<Apple> inventory) {
+    private static List<Apple> filterApplesByColor(List<Apple> inventory, Color color) {
         List<Apple> result = new ArrayList<>();
         for (Apple apple : inventory) {
-            if (GREEN.equals(apple.getColor())) {
+            if (color.equals(apple.getColor())) {
                 result.add(apple);
             }
         }
