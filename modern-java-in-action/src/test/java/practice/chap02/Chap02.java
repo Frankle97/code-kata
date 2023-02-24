@@ -1,35 +1,16 @@
 package practice.chap02;
 
+import practice.chap02.apple.Apple;
+import practice.chap02.apple.Color;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import static practice.chap02.Chap02.Color.GREEN;
-import static practice.chap02.Chap02.Color.RED;
+import static practice.chap02.apple.Color.GREEN;
+import static practice.chap02.apple.Color.RED;
+
 
 public class Chap02 {
-
-    private static class Apple {
-        private Color color;
-
-        public Apple(Color color) {
-            this.color = color;
-        }
-
-        public Color getColor() {
-            return color;
-        }
-
-        @Override
-        public String toString() {
-            return "Apple{" +
-                    "color=" + color +
-                    '}';
-        }
-    }
-
-    enum Color {
-        RED, GREEN
-    }
 
     public static void main(String[] args) {
         List<Apple> apples = new ArrayList<>();
