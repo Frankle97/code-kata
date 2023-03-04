@@ -85,6 +85,10 @@ class StreamTest {
                     .takeWhile(dish -> dish.getCalories() < 320)
                     .collect(toList());
 
+            System.out.println("filteredMenu = " + filteredMenu);
+
+            System.out.println("slicedMenu = " + slicedMenu);
+
             assertEquals(filteredMenu, slicedMenu);
         }
 

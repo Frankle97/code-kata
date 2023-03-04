@@ -1,12 +1,10 @@
 package practice.chap03;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static java.util.Comparator.*;
 import static java.util.stream.Collectors.toList;
@@ -119,7 +117,7 @@ public class StreamPracticeTest {
     void quiz_7() {
         Integer maxValue = transactions.stream()
                 .map(Transaction::getValue)
-                .reduce(Integer::max)
+                .max(comparing(Integer::intValue))
                 .orElseThrow(NoSuchElementException::new);
 
         assertEquals(maxValue, 1000);
