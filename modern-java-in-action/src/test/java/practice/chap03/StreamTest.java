@@ -3,9 +3,14 @@ package practice.chap03;
 import org.junit.jupiter.api.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+import static java.util.Comparator.comparingInt;
+import static java.util.stream.Collectors.*;
 
 import static java.util.Arrays.asList;
-import static java.util.stream.Collectors.toList;
+import static java.util.Comparator.comparing;
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -190,6 +195,122 @@ class StreamTest {
                     .orElseThrow(NoSuchElementException::new);
             assertEquals(count, menu.size());
         }
+    }
+
+    @Nested
+    @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+    class 스트림_리듀싱과_요약 {
+        @Test
+        void 스트림값에서_최댓값과_최솟값_검색() {
+            Dish dish = menu.stream()
+                    .max(comparing(Dish::getCalories))
+                    .orElseThrow(NoSuchFieldError::new);
+
+            System.out.println("dish = " + dish.toString());
+        }
+
+        @Test
+        void 요약_연산() {
+            Integer totalLegacy = menu.stream().collect(reducing(0, Dish::getCalories, (i, j) -> i + j));
+            System.out.println("totalLegacy = " + totalLegacy);
+
+            int totalLegacy1 = menu.stream().mapToInt(Dish::getCalories).sum();
+            System.out.println("totalLegacy1 = " + totalLegacy1);
+
+            Integer total = menu.stream().collect(summingInt(Dish::getCalories));
+            System.out.println("total = " + total);
+
+            Double avg = menu.stream().collect(averagingInt(Dish::getCalories));
+            System.out.println("avg = " + avg);
+
+            IntSummaryStatistics summaryStatistics = menu.stream().collect(summarizingInt(Dish::getCalories));
+            System.out.println("summaryStatistics = " + summaryStatistics);
+        }
+
+        @Test
+        void 문자열_연결() {
+            String joiningName = menu.stream().map(Dish::getName).collect(joining(", "));
+            System.out.println("joiningName = " + joiningName);
+        }
+
+        @Test
+        void 그룹화() {
+            Map<Dish.Type, List<Dish>> collect = menu.stream().collect(groupingBy(Dish::getType));
+            System.out.println("collect = " + collect);
+
+            Map<CaloricLevel, List<Dish>> caloricLevelListMap = menu.stream().collect(
+                    groupingBy(dish -> {
+                        if (dish.getCalories() <= 400) return CaloricLevel.DIET;
+                        if (dish.getCalories() <= 700) return CaloricLevel.NORMAL;
+                        else return CaloricLevel.FAT;
+                    }));
+            System.out.println("caloricLevelListMap = " + caloricLevelListMap);
+        }
+
+        @Test
+        void 그룹화된_요소_조작() {
+            Map<Dish.Type, List<Dish>> map = menu.stream()
+                    .filter(dish -> dish.getCalories() > 700)
+                    .collect(groupingBy(Dish::getType));
+            System.out.println("map = " + map);
+
+            Map<Dish.Type, List<Dish>> collect = menu.stream()
+                    .collect(groupingBy(Dish::getType, filtering(dish -> dish.getCalories() > 700, toList())));
+            System.out.println("collect = " + collect);
+
+            Map<Dish.Type, List<String>> collect1 = menu.stream()
+                    .collect(groupingBy(Dish::getType, mapping(Dish::getName, toList())));
+            System.out.println("collect1 = " + collect1);
+
+            Map<Dish.Type, Integer> collect2 = menu.stream()
+                    .collect(groupingBy(Dish::getType, summingInt(Dish::getCalories)));
+            System.out.println("collect2 = " + collect2);
+
+            Map<Dish.Type, Set<CaloricLevel>> collect3 = menu.stream()
+                    .collect(groupingBy(
+                            Dish::getType, mapping(dish -> {
+                                if (dish.getCalories() <= 400) return CaloricLevel.DIET;
+                                else if (dish.getCalories() <= 700) return CaloricLevel.NORMAL;
+                                else return CaloricLevel.FAT;
+                            }, toSet())
+                    ));
+            System.out.println("collect3 = " + collect3);
+        }
+
+        @Test
+        void 분할() {
+            Map<Boolean, List<Dish>> collect = menu.stream().collect(partitioningBy(Dish::isVegetarian));
+            System.out.println("collect = " + collect);
+
+            Map<Boolean, Dish> collect1 = menu.stream()
+                    .collect(partitioningBy(Dish::isVegetarian, collectingAndThen(maxBy(comparingInt(Dish::getCalories)), Optional::get)));
+            System.out.println("collect1 = " + collect1);
+
+            Map<Boolean, Map<Boolean, List<Dish>>> collect2 = menu.stream()
+                    .collect(partitioningBy(Dish::isVegetarian,
+                            partitioningBy(d -> d.getCalories() > 500)));
+            System.out.println("collect2 = " + collect2);
+
+            Map<Boolean, List<Integer>> collect3 = partitionPrimes(10);
+            System.out.println("collect3 = " + collect3);
+        }
+
+        private boolean isPrime(int candidate) {
+            int candidateRoot = (int) Math.sqrt((double) candidate);
+            return IntStream.rangeClosed(2, candidateRoot)
+                    .noneMatch(i -> candidate % i == 0);
+        }
+
+        private Map<Boolean, List<Integer>> partitionPrimes(int n) {
+            return IntStream.rangeClosed(2, n).boxed()
+                    .collect(partitioningBy(candidate -> isPrime(candidate)));
+        }
+    }
+
+    private enum CaloricLevel {
+        DIET,
+        NORMAL,
+        FAT
     }
 
 
