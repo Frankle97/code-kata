@@ -11,6 +11,8 @@ public class RefactoringSample {
         StatementData statementData = new StatementData();
         statementData.setCustomerName(invoice.getCustomerName());
         statementData.setPerformances(invoice.getPerformances());
+        statementData.setTotalAmount(totalAmount());
+        statementData.setTotalVolumeCredits(totalVolumeCredits());
         return renderPlainText(statementData);
     }
 
@@ -21,12 +23,12 @@ public class RefactoringSample {
             result += playFor(performance).getName() + ": " + amountFor(performance) + "원, " + performance.getAudience() + "석\n";
         }
 
-        result += "총액: " + getTotalAmount() + "원\n";
-        result += "적립 포인트: " + totalVolumeCredits() + "점\n";
+        result += "총액: " + data.getTotalAmount() + "원\n";
+        result += "적립 포인트: " + data.getTotalVolumeCredits() + "점\n";
         return result;
     }
 
-    private static int getTotalAmount() throws Exception {
+    private static int totalAmount() throws Exception {
         int result = 0;
         for (Performance performance : performances) {
             result += amountFor(performance);
