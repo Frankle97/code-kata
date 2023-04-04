@@ -7,13 +7,17 @@ public class RefactoringSample {
     private static Invoices invoices;
     private static Map<String, Play> plays;
 
-    public static String statement(Invoices invoice, Map<String, Play> plays) throws Exception {
+    private static StatementData createStatementData(Invoices invoice) throws Exception {
         StatementData statementData = new StatementData();
         statementData.setCustomerName(invoice.getCustomerName());
         statementData.setPerformances(invoice.getPerformances());
         statementData.setTotalAmount(totalAmount());
         statementData.setTotalVolumeCredits(totalVolumeCredits());
-        return renderPlainText(statementData);
+        return statementData;
+    }
+
+    public static String statement(Invoices invoice, Map<String, Play> plays) throws Exception {
+        return renderPlainText(createStatementData(invoice));
     }
 
     private static String renderPlainText(StatementData data) throws Exception {
@@ -27,6 +31,25 @@ public class RefactoringSample {
         result += "적립 포인트: " + data.getTotalVolumeCredits() + "점\n";
         return result;
     }
+
+    public static String htmlStatement(Invoices invoices, Map<String, Play> plays) throws Exception {
+        return renderHtml(createStatementData(invoices));
+    }
+
+    private static String renderHtml(StatementData data) throws Exception {
+        String result = "<h1>청구 내역 (고객명: " + data.getCustomerName() + " </h1>\n";
+        result += "<table>\n";
+        result += "<tr><th>연극</th><th>좌석 수</th><th>금액</th></tr>\n";
+        for (Performance performance : data.getPerformances()) {
+            result += "<tr><td>" + performance.getPlayId() + "</td><td>(" + performance.getAudience() + "석)</td>";
+            result += "<td>" + amountFor(performance) + "</td></tr>\n";
+        }
+        result += "</table>\n";
+        result += "<p>총액: <em>" + data.getTotalAmount() + "</em></p>\n";
+        result += "<p>적립 포인트: " + data.getTotalVolumeCredits() + "</em>점</p>\n";
+        return result;
+    }
+
 
     private static int totalAmount() throws Exception {
         int result = 0;
@@ -93,5 +116,6 @@ public class RefactoringSample {
         plays.put("othello", new Play("Othello", "tragedy"));
 
         System.out.println(statement(invoices, plays));
+        System.out.println(htmlStatement(invoices, plays));
     }
 }
