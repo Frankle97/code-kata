@@ -25,12 +25,12 @@ public class RefactoringSample {
     }
 
     private static int volumeCreditsFor(Performance performance) {
-        int volumeCredits = 0;
-        volumeCredits += Math.max(performance.getAudience() - 30, 0);
+        int result = 0;
+        result += Math.max(performance.getAudience() - 30, 0);
         if ("comedy".equals(playFor(performance).getType())) {
-            volumeCredits += Math.floor(performance.getAudience() / 5);
+            result += Math.floor(performance.getAudience() / 5);
         }
-        return volumeCredits;
+        return result;
     }
 
     private static Play playFor(Performance performance) {
