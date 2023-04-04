@@ -13,15 +13,13 @@ public class RefactoringSample {
         String result = "청구 내역 고객명 : " + invoice.getCustomerName() + '\n';
 
         for (var perf : invoice.getPerformances()) {
-            int thisAmount = amountFor(perf);
-
             volumeCredits += Math.max(perf.getAudience() - 30, 0);
             if ("comedy".equals(playFor( perf).getType())) {
                 volumeCredits += Math.floor(perf.getAudience() / 5);
             }
 
-            result += playFor( perf).getName() + ": " + thisAmount + "원, " + perf.getAudience() + "석\n";
-            totalAmount += thisAmount;
+            result += playFor( perf).getName() + ": " + amountFor(perf) + "원, " + perf.getAudience() + "석\n";
+            totalAmount += amountFor(perf);
         }
 
         result += "총액: " + totalAmount + "원\n";
