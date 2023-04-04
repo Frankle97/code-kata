@@ -8,6 +8,10 @@ public class RefactoringSample {
     private static Map<String, Play> plays;
 
     public static String statement(Invoices invoice, Map<String, Play> plays) throws Exception {
+        return renderPlainText(invoice);
+    }
+
+    private static String renderPlainText(Invoices invoice) throws Exception {
         String result = "청구 내역 고객명 : " + invoice.getCustomerName() + '\n';
 
         for (Performance performance : invoice.getPerformances()) {
