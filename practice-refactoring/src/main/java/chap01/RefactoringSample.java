@@ -13,7 +13,7 @@ public class RefactoringSample {
         String result = "청구 내역 고객명 : " + invoice.getCustomerName() + '\n';
 
         for (var perf : invoice.getPerformances()) {
-            int thisAmount = amountFor(perf, playFor( perf));
+            int thisAmount = amountFor(perf);
 
             volumeCredits += Math.max(perf.getAudience() - 30, 0);
             if ("comedy".equals(playFor( perf).getType())) {
@@ -33,10 +33,10 @@ public class RefactoringSample {
         return plays.get(performance.getPlayId());
     }
 
-    private static int amountFor(Performance performance, Play play) throws Exception {
+    private static int amountFor(Performance performance) throws Exception {
         var result = 0;
 
-        switch (play.getType()) {
+        switch (playFor(performance).getType()) {
             case "tragedy":
                 result = 40000;
                 if (performance.getAudience() > 30) {
