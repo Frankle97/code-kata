@@ -8,26 +8,31 @@ public class RefactoringSample {
     private static Map<String, Play> plays;
 
     public static String statement(Invoices invoice, Map<String, Play> plays) throws Exception {
-        int totalAmount = 0;
         String result = "청구 내역 고객명 : " + invoice.getCustomerName() + '\n';
 
         for (Performance performance : invoice.getPerformances()) {
-
             result += playFor(performance).getName() + ": " + amountFor(performance) + "원, " + performance.getAudience() + "석\n";
-            totalAmount += amountFor(performance);
         }
 
-        result += "총액: " + totalAmount + "원\n";
+        result += "총액: " + getTotalAmount() + "원\n";
         result += "적립 포인트: " + totalVolumeCredits() + "점\n";
         return result;
     }
 
-    private static int totalVolumeCredits() {
-        int volumeCredits = 0;
+    private static int getTotalAmount() throws Exception {
+        int result = 0;
         for (Performance performance : performances) {
-            volumeCredits = volumeCreditsFor(performance);
+            result += amountFor(performance);
         }
-        return volumeCredits;
+        return result;
+    }
+
+    private static int totalVolumeCredits() {
+        int result = 0;
+        for (Performance performance : performances) {
+            result = volumeCreditsFor(performance);
+        }
+        return result;
     }
 
     private static int volumeCreditsFor(Performance performance) {
