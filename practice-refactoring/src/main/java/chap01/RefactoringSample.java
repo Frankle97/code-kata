@@ -10,25 +10,7 @@ public class RefactoringSample {
 
         for (var perf : invoice.getPerformances()) {
             Play play = plays.get(perf.getPlayId());
-            var thisAmount = 0;
-
-            switch (play.getType()) {
-                case "tragedy":
-                    thisAmount = 40000;
-                    if (perf.getAudience() > 30) {
-                        thisAmount += 1000 * (perf.getAudience() - 30);
-                    }
-                    break;
-                case "comedy":
-                    thisAmount = 30000;
-                    if (perf.getAudience() > 20) {
-                        thisAmount += 10000 + 500 * (perf.getAudience() - 20);
-                    }
-                    thisAmount += 300 * perf.getAudience();
-                    break;
-                default:
-                    throw new Exception("알 수 없는 장르");
-            }
+            int thisAmount = amountFor(perf, play);
 
             volumeCredits += Math.max(perf.getAudience() - 30, 0);
             if ("comedy".equals(play.getType())) {
@@ -42,6 +24,29 @@ public class RefactoringSample {
         result += "총액: " + totalAmount + "원\n";
         result += "적립 포인트: " + volumeCredits + "점\n";
         return result;
+    }
+
+    private static int amountFor(Performance perf, Play play) throws Exception {
+        var thisAmount = 0;
+
+        switch (play.getType()) {
+            case "tragedy":
+                thisAmount = 40000;
+                if (perf.getAudience() > 30) {
+                    thisAmount += 1000 * (perf.getAudience() - 30);
+                }
+                break;
+            case "comedy":
+                thisAmount = 30000;
+                if (perf.getAudience() > 20) {
+                    thisAmount += 10000 + 500 * (perf.getAudience() - 20);
+                }
+                thisAmount += 300 * perf.getAudience();
+                break;
+            default:
+                throw new Exception("알 수 없는 장르");
+        }
+        return thisAmount;
     }
 
     public static void main(String[] args) throws Exception {
