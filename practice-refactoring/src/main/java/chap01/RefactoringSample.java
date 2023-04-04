@@ -3,67 +3,39 @@ package chap01;
 import java.util.*;
 
 public class RefactoringSample {
-    private static class Play {
-        private String name;
-        private String type;
-
-        public Play(String name, String type) {
-            this.name = name;
-            this.type = type;
-        }
-    }
-
-    private static class Invoices{
-        private String customerName;
-        private List<Performances> performances;
-
-        private static class Performances{
-            private String playId;
-            private int audience;
-
-            public Performances(String playId, int audience) {
-                this.playId = playId;
-                this.audience = audience;
-            }
-        }
-
-        public Invoices(String customerName, List<Performances> performances) {
-            this.customerName = customerName;
-            this.performances = performances;
-        }
-    }
-
     public static String statement(Invoices invoice, Map<String, Play> plays) throws Exception {
-        var totalAmount = 0;
-        var volumeCredits = 0;
-        var result = "청구 내역 고객명 : " + invoice.customerName + '\n';
+        int totalAmount = 0;
+        int volumeCredits = 0;
+        String result = "청구 내역 고객명 : " + invoice.getCustomerName() + '\n';
 
-        for(var perf : invoice.performances){
-            Play play = plays.get(perf.playId);
+        for (var perf : invoice.getPerformances()) {
+            Play play = plays.get(perf.getPlayId());
             var thisAmount = 0;
 
-            switch(play.type){
+            switch (play.getType()) {
                 case "tragedy":
                     thisAmount = 40000;
-                    if(perf.audience > 30){
-                        thisAmount += 1000 * (perf.audience - 30);
+                    if (perf.getAudience() > 30) {
+                        thisAmount += 1000 * (perf.getAudience() - 30);
                     }
                     break;
                 case "comedy":
                     thisAmount = 30000;
-                    if(perf.audience > 20){
-                        thisAmount += 10000 + 500 * (perf.audience - 20);
+                    if (perf.getAudience() > 20) {
+                        thisAmount += 10000 + 500 * (perf.getAudience() - 20);
                     }
-                    thisAmount += 300 * perf.audience;
+                    thisAmount += 300 * perf.getAudience();
                     break;
                 default:
                     throw new Exception("알 수 없는 장르");
             }
 
-            volumeCredits += Math.max(perf.audience - 30, 0);
-            if("comedy".equals(play.type)) volumeCredits += Math.floor(perf.audience / 5);
+            volumeCredits += Math.max(perf.getAudience() - 30, 0);
+            if ("comedy".equals(play.getType())) {
+                volumeCredits += Math.floor(perf.getAudience() / 5);
+            }
 
-            result += play.name + ": " + thisAmount + "원, " + perf.audience + "석\n";
+            result += play.getName() + ": " + thisAmount + "원, " + perf.getAudience() + "석\n";
             totalAmount += thisAmount;
         }
 
@@ -73,16 +45,16 @@ public class RefactoringSample {
     }
 
     public static void main(String[] args) throws Exception {
-        List<Invoices.Performances> performances = new ArrayList<>();
-        performances.add(new Invoices.Performances("hamlet",55));
-        performances.add(new Invoices.Performances("as-like",35));
-        performances.add(new Invoices.Performances("othello",40));
+        List<Performance> performances = new ArrayList<>();
+        performances.add(new Performance("hamlet", 55));
+        performances.add(new Performance("as-like", 35));
+        performances.add(new Performance("othello", 40));
 
         Invoices invoices = new Invoices("BigCo", performances);
         Map<String, Play> plays = new HashMap<>();
-        plays.put("hamlet",new Play("Hamlet", "tragedy"));
-        plays.put("as-like",new Play("As You Like It", "comedy"));
-        plays.put("othello",new Play("Othello", "tragedy"));
+        plays.put("hamlet", new Play("Hamlet", "tragedy"));
+        plays.put("as-like", new Play("As You Like It", "comedy"));
+        plays.put("othello", new Play("Othello", "tragedy"));
 
         System.out.println(statement(invoices, plays));
     }
