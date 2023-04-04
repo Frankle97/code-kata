@@ -8,13 +8,16 @@ public class RefactoringSample {
     private static Map<String, Play> plays;
 
     public static String statement(Invoices invoice, Map<String, Play> plays) throws Exception {
-        return renderPlainText(invoice);
+        StatementData statementData = new StatementData();
+        statementData.setCustomerName(invoice.getCustomerName());
+        statementData.setPerformances(invoice.getPerformances());
+        return renderPlainText(statementData);
     }
 
-    private static String renderPlainText(Invoices invoice) throws Exception {
-        String result = "청구 내역 고객명 : " + invoice.getCustomerName() + '\n';
+    private static String renderPlainText(StatementData data) throws Exception {
+        String result = "청구 내역 고객명 : " + data.getCustomerName() + '\n';
 
-        for (Performance performance : invoice.getPerformances()) {
+        for (Performance performance : data.getPerformances()) {
             result += playFor(performance).getName() + ": " + amountFor(performance) + "원, " + performance.getAudience() + "석\n";
         }
 
