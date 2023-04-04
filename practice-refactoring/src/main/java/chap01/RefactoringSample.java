@@ -12,19 +12,25 @@ public class RefactoringSample {
         int volumeCredits = 0;
         String result = "청구 내역 고객명 : " + invoice.getCustomerName() + '\n';
 
-        for (var perf : invoice.getPerformances()) {
-            volumeCredits += Math.max(perf.getAudience() - 30, 0);
-            if ("comedy".equals(playFor( perf).getType())) {
-                volumeCredits += Math.floor(perf.getAudience() / 5);
-            }
+        for (var performance : invoice.getPerformances()) {
+            volumeCredits = volumeCreditsFor(performance);
 
-            result += playFor( perf).getName() + ": " + amountFor(perf) + "원, " + perf.getAudience() + "석\n";
-            totalAmount += amountFor(perf);
+            result += playFor(performance).getName() + ": " + amountFor(performance) + "원, " + performance.getAudience() + "석\n";
+            totalAmount += amountFor(performance);
         }
 
         result += "총액: " + totalAmount + "원\n";
         result += "적립 포인트: " + volumeCredits + "점\n";
         return result;
+    }
+
+    private static int volumeCreditsFor(Performance performance) {
+        int volumeCredits = 0;
+        volumeCredits += Math.max(performance.getAudience() - 30, 0);
+        if ("comedy".equals(playFor(performance).getType())) {
+            volumeCredits += Math.floor(performance.getAudience() / 5);
+        }
+        return volumeCredits;
     }
 
     private static Play playFor(Performance performance) {
